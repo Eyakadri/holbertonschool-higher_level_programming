@@ -1,5 +1,4 @@
 #!/usr/bin/python3
-import string
-for i in string.ascii_lowercase:
-    if i not in 'qe':
-        print(i, end="")
+for i in range(ord('a'), ord('z')+1):
+    if i != "qe":
+        print("{:c}".format(i), end="")
