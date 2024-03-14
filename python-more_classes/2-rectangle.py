@@ -4,7 +4,7 @@
 
 class Rectangle:
     """
-    Class that defines properties of rectangle 
+    Class that defines properties of rectangle.
 
     Attributes:
         width (int): width of the rectangle.
@@ -44,7 +44,7 @@ class Rectangle:
         """Property setter for width of rectangle.
 
         Args:
-            value (int): width of the rectangle.
+        value (int): width of the rectangle.
 
         Raises:
             TypeError: if width is not an integer.
