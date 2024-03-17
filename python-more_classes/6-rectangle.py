@@ -3,7 +3,6 @@
     6-rectangle: class Rectangle
 """
 
-
 class Rectangle:
     """
         class Rectangle defines a rectangle
@@ -28,6 +27,7 @@ class Rectangle:
         else:
             raise TypeError("height must be an integer")
         Rectangle.number_of_instances += 1
+
 
     @property
     def width(self):
