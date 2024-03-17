@@ -75,6 +75,9 @@ class Rectangle:
         return rect
 
     def __del__(self):
-        """Print a message for every deletion of a Rectangle."""
-        type(self).number_of_instances -= 1
+        """
+            properly deletes the instance of a class.
+        """
+        if Rectangle.number_of_instances > 0:
+            Rectangle.number_of_instances -= 1
         print("Bye rectangle...")
