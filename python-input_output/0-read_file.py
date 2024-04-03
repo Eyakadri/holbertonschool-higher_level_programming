@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-"""function containing the function read_file"""
+"""function containing the function read_file
+"""
 
 
 def read_file(filename=""):
@@ -11,5 +12,3 @@ def read_file(filename=""):
                 print(line, end='')
     except FileNotFoundError:
         print(f"File '{filename}' not found.")
-
-read_file("example.txt")
