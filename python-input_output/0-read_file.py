@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-"""module containing the function read_file"""
+"""module containing the function read_file
+"""
 
 
 def read_file(filename=""):
