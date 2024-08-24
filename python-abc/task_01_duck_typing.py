@@ -14,7 +14,7 @@ class Shape(ABC):  # Abstract class Shape
 
 class Circle(Shape):  # Circle class inherits from Shape
     def __init__(self, radius):
-        self.radius = radius
+        self.radius = abs(radius)  # Convert negative radius to positive
 
     def area(self):
         return math.pi * self.radius ** 2
