@@ -6,8 +6,8 @@ import json
 def serialize_and_save_to_file(data, filename):
     """
     Serializes a Python dictionary
-    :parameter data: Dictionary to serialize
-    :parameter filename: Name of the file
+    :param data: Dictionary to serialize
+    :param filename: Name of the file
     """
     try:
         with open(filename, 'w') as json_file:
@@ -19,7 +19,7 @@ def serialize_and_save_to_file(data, filename):
 def load_and_deserialize(filename):
     """
     Loads a JSON file and deserializes
-    :parameter filename: Name of the JSON file to read
+    :param filename: Name of the JSON file to read
     :return: Dictionary deserialized
     """
     try:
