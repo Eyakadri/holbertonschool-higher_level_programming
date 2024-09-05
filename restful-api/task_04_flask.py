@@ -2,22 +2,27 @@ from flask import Flask, jsonify, request
 
 app = Flask(__name__)
 
-users = {} 
+# Initially an empty dictionary
+users = {}
 
 @app.route('/')
 def home():
     return "Welcome to the Flask API!"
 
+# Return list of all usernames
 @app.route('/data')
 def get_users():
+    print(f"Current users: {users}")  # Debugging info
     if not users:
-        return jsonify([])
+        return jsonify([])  # Return empty list if no users exist
     return jsonify(list(users.keys()))
 
+# Status endpoint
 @app.route("/status")
 def status():
     return "OK"
 
+# Get user details by username
 @app.route("/users/<username>")
 def get_user(username):
     user = users.get(username)
@@ -26,16 +31,26 @@ def get_user(username):
     else:
         return jsonify({"error": "User not found"}), 404
 
+# Add a new user
 @app.route("/add_user", methods=["POST"])
 def add_user():
+    print(f"Received data: {request.json}")  # Debugging info
+
+    # Check if request contains JSON
+    if not request.is_json:
+        return jsonify({"error": "Invalid data format, expected JSON"}), 400
+
     user_data = request.json
-    if not user_data:
-        return jsonify({"error": "Invalid data"}), 400
 
+    # Validate user data
     username = user_data.get("username")
-    if not username or username in users:
-        return jsonify({"error": "Invalid or duplicate username"}), 400
+    if not username:
+        return jsonify({"error": "Username is required"}), 400
 
+    if username in users:
+        return jsonify({"error": "Duplicate username"}), 400
+
+    # Add user
     users[username] = {
         "username": username,
         "name": user_data.get("name"),
