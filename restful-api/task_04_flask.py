@@ -4,7 +4,7 @@ from flask import request
 
 app = Flask(__name__)
 
-# In-memory user storage
+
 users = {
     "jane": {"name": "Jane", "age": 28, "city": "Los Angeles"},
     "john": {"name": "John", "age": 30, "city": "New York"}
@@ -30,6 +30,27 @@ def get_user(username):
         return jsonify(user)
     else:
         return jsonify({"error": "User not found"}), 404  # Return 404 if user not found
+
+@app.route("/add_user", methods=["POST"])
+def add_user():
+    user_data = request.json
+    username = user_data.get("username")
+    if not username or username in users:
+        return jsonify({"error": "Invalid or duplicate username"}), 400
+
+    users[username] = {
+        "username": username,
+        "name": user_data.get("name"),
+        "age": user_data.get("age"),
+        "city": user_data.get("city")
+    }
+
+    return jsonify({
+        "message": "User added",
+        "user": users[username]
+    })
+
+
 
 if __name__ == "__main__":
     app.run()
