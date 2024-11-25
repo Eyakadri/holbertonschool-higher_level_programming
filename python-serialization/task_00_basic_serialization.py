@@ -1,31 +1,38 @@
 import json
 
-
 def serialize_and_save_to_file(data, filename):
     """
-Serialize a Python dictionary to JSON and save it to a file
+    Serialize a Python dictionary to JSON and save it to a file.
+    
     Args:
-        data (dict): The dictionary to serialize
-        filename (str): The output JSON file name
+        data (dict): Dictionary to serialize
+        filename (str): Output JSON filename
     """
     try:
-        with open(filename, 'w') as file:
-            json.dump(data, file)
+        with open(filename, 'w') as f:
+            json.dump(data, f, indent=4)
     except Exception as e:
-        print(f"Error saving to file: {str(e)}")
-
+        print(f"Error serializing data: {e}")
 
 def load_and_deserialize(filename):
     """
-    Load and deserialize data from a JSON file
+    Load and deserialize data from a JSON file.
+    
     Args:
-        filename (str): The input JSON file name
+        filename (str): Input JSON filename
+    
     Returns:
-        dict: The deserialized dictionary
+        dict: Deserialized dictionary from JSON file
     """
     try:
-        with open(filename, 'r') as file:
-            return json.load(file)
+        with open(filename, 'r') as f:
+            return json.load(f)
+    except FileNotFoundError:
+        print(f"File {filename} not found")
+        return None
+    except json.JSONDecodeError:
+        print(f"Error decoding JSON from {filename}")
+        return None
     except Exception as e:
-        print(f"Error loading file: {str(e)}")
+        print(f"Error loading file: {e}")
         return None
