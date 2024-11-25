@@ -31,10 +31,11 @@ class MyRequestHandler(http.server.BaseHTTPRequestHandler):
 
         # Handle undefined endpoints with a 404 response
         else:
-            self.send_response(404)
-            self.send_header("Content-type", "text/plain")
-            self.end_headers()
-            self.wfile.write(b"404 Not Found")
+         self.send_response(404)
+        self.send_header("Content-type", "application/json")
+        self.end_headers()
+        error_response = {"error": "404 Not Found", "path": self.path}
+        self.wfile.write(json.dumps(error_response).encode('utf-8'))
 
 if __name__ == "__main__":
     with socketserver.TCPServer(("", PORT), MyRequestHandler) as httpd:
