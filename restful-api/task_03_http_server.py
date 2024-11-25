@@ -1,43 +1,43 @@
 import http.server
-import socketserver
 import json
 
-PORT = 8000
-
-class MyRequestHandler(http.server.BaseHTTPRequestHandler):
-
+class SimpleAPIHandler(http.server.BaseHTTPRequestHandler):
     def do_GET(self):
-        # Handle the root endpoint
-        if self.path == "/":
+        if self.path == '/':
+            # handle root endpoint
             self.send_response(200)
-            self.send_header("Content-type", "text/plain")
+            self.send_header('Content-type', 'text/plain')
             self.end_headers()
             self.wfile.write(b"Hello, this is a simple API!")
-
-        # Handle the /data endpoint
-        elif self.path == "/data":
+            
+        elif self.path == '/data':
+            # handle /data endpoint
+            data = {
+                "name": "John",
+                "age": 30,
+                "city": "New York"
+            }
             self.send_response(200)
-            self.send_header("Content-type", "application/json")
+            self.send_header('Content-type', 'application/json')
             self.end_headers()
-            data = {"name": "John", "age": 30, "city": "New York"}
-            self.wfile.write(json.dumps(data).encode('utf-8'))
-
-        # Handle the /status endpoint
-        elif self.path == "/status":
+            self.wfile.write(json.dumps(data).encode())
+            
+        elif self.path == '/status':
+            # handle /status endpoint
             self.send_response(200)
-            self.send_header("Content-type", "text/plain")
+            self.send_header('Content-type', 'text/plain')
             self.end_headers()
             self.wfile.write(b"OK")
-
-        # Handle undefined endpoints with a 404 response
+            
         else:
-         self.send_response(404)
-        self.send_header("Content-type", "application/json")
-        self.end_headers()
-        error_response = {"error": "404 Not Found", "path": self.path}
-        self.wfile.write(json.dumps(error_response).encode('utf-8'))
+            # handle undefined endpoints
+            self.send_response(404)
+            self.send_header('Content-type', 'text/plain')
+            self.end_headers()
+            self.wfile.write(b"Endpoint not found")
 
-if __name__ == "__main__":
-    with socketserver.TCPServer(("", PORT), MyRequestHandler) as httpd:
-        print(f"Serving on port {PORT}")
-        httpd.serve_forever()
+# create and start the server
+server_address = ('', 8000)
+httpd = http.server.HTTPServer(server_address, SimpleAPIHandler)
+print("Server running on port 8000...")
+httpd.serve_forever()
