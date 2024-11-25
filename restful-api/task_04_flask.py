@@ -1,46 +1,31 @@
 from flask import Flask, jsonify, request
+import logging
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
+
+# Set up logging
+logging.basicConfig(
+    filename='api.log',
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s'
+)
 
 app = Flask(__name__)
+limiter = Limiter(
+    app=app,
+    key_func=get_remote_address,
+    default_limits=["100 per day", "10 per minute"]
+)
 
-# store users in memory
-users = {
-    "jane": {"username": "jane", "name": "Jane", "age": 28, "city": "Los Angeles"},
-    "john": {"username": "john", "name": "John", "age": 30, "city": "New York"}
-}
+@app.before_request
+def log_request():
+    logging.info(f"Request: {request.method} {request.url}")
 
-@app.route('/')
-def home():
-    return "Welcome to the Flask API!"
+@app.after_request
+def log_response(response):
+    logging.info(f"Response: {response.status}")
+    return response
 
-@app.route('/data')
-def get_users():
-    return jsonify(list(users.keys()) if users else [])
-
-
-@app.route('/status')
-def status():
-    return "OK"
-
-@app.route('/users/<username>')
-def get_user(username):
-    if username in users:
-        return jsonify({"status": "success", "data": users[username]})
-    return jsonify({"status": "error", "message": "User not found"}), 404
-
-@app.route('/add_user', methods=['POST'])
-def add_user():
-    data = request.get_json()
-    
-    if 'username' not in data:
-        return jsonify({"error": "Username is required"}), 400
-        
-    username = data['username']
-    users[username] = data
-    
-    return jsonify({
-        "message": "User added",
-        "user": data
-    }), 201
-
-if __name__ == "__main__":
-    app.run(debug=True)
+@app.errorhandler(429)
+def ratelimit_handler(e):
+    return jsonify({"error": "Rate limit exceeded"}), 429
