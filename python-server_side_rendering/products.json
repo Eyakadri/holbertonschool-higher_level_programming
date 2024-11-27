@@ -2,27 +2,20 @@
     "products": [
         {
             "id": 1,
-            "name": "Laptop",
-            "category": "Electronics",
-            "price": 799.99
+            "name": "Jarvis",
+            "category": "AI Assistant",
+            "price": 999.99
         },
         {
             "id": 2,
-            "name": "Coffee Mug",
-            "category": "Home Goods",
-            "price": 15.99
-        },
-        {
-            "id": 3,
-            "name": "Wireless Mouse",
+            "name": "SmartWatch Pro",
             "category": "Electronics",
-            "price": 29.99
-        },
-        {
-            "id": 4,
-            "name": "Desk Lamp",
-            "category": "Home Goods",
-            "price": 45.50
+            "price": 299.99
         }
-    ]
+    ],
+    "metadata": {
+        "last_updated": "2024-11-27",
+        "version": "1.0",
+        "total_products": 2
+    }
 }
