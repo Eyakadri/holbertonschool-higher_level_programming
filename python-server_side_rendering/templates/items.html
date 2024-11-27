@@ -1,13 +1,10 @@
-<!-- templates/items.html -->
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
     <title>Items List</title>
 </head>
 <body>
-    {% include 'header.html' %}
-    <h1>Items List</h1>
-    
+    <h1>Available Items</h1>
     {% if items %}
         <ul>
         {% for item in items %}
@@ -17,7 +14,5 @@
     {% else %}
         <p>No items found</p>
     {% endif %}
-    
-    {% include 'footer.html' %}
 </body>
 </html>
