@@ -1,33 +1,30 @@
 #!/usr/bin/python3
-
 """
-    a script that lists all states from the database hbtn_0e_0_usa
-"""
-
-
-import sys
+    script that takes in an argument and displays all values in the states"""
+from sys import argv
 import MySQLdb
-
-
-if __name__ == '__main__':
-    db = MySQLdb.connect(user=sys.argv[1],
-                         passwd=sys.argv[2],
-                         db=sys.argv[3],
-                         host='localhost',
-                         port=3306)
-
-    cursor = db.cursor()
-
-    sql = """ SELECT * FROM states
-          WHERE name LIKE BINARY '{}'
-          ORDER BY id ASC """.format(sys.argv[4])
-
-    cursor.execute(sql)
-
-    data = cursor.fetchall()
-
-    for row in data:
-        print(row)
-
-    cursor.close()
-    db.close()
+if __name__ == "__main__":
+    conn = MySQLdb.connect(
+        host="localhost",
+        port=3306,
+        user=argv[1],
+        passwd=argv[2],
+        db=argv[3],
+        charset="utf8")
+    cur = conn.cursor()
+    try:
+        search = argv[4]
+        stmt = """
+        SELECT * FROM states WHERE name LIKE BINARY '{:s}' ORDER BY id ASC;
+        """.format(search)
+        cur.execute(stmt)
+        rtn = cur.fetchall()
+    except MySQLdb.Error:
+        try:
+            rtn = ("MySQLdb Error")
+        except IndexError:
+            rtn = ("MySQLdb Error - IndexError")
+    for i in rtn:
+        print(i)
+    cur.close()
+    conn.close()
