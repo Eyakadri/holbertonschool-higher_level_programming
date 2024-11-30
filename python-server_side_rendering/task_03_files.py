@@ -5,48 +5,47 @@ import csv
 app = Flask(__name__)
 
 def read_json_data():
-    with open('products.json', 'r') as file:
-        return json.load(file)['products']
+    with open('data/products.json', 'r') as file:
+        return json.load(file)
 
 def read_csv_data():
     products = []
-    with open('products.csv', 'r') as file:
+    with open('data/products.csv', 'r') as file:
         reader = csv.DictReader(file)
         for row in reader:
-            row['price'] = float(row['price'])
+            # Convert id to int and price to float
             row['id'] = int(row['id'])
+            row['price'] = float(row['price'])
             products.append(row)
     return products
 
 @app.route('/products')
-def show_products():
-    source = request.args.get('source')
-    product_id = request.args.get('id')
+def display_products():
+    source = request.args.get('source', default='json')
+    product_id = request.args.get('id', type=int)
     
-    try:
-        if source == 'json':
-            products = read_json_data()
-        elif source == 'csv':
-            products = read_csv_data()
-        else:
-            return render_template('product_display.html', 
-                                error="Invalid source. Use 'json' or 'csv'")
-        
-        if product_id:
-            product_id = int(product_id)
-            products = [p for p in products if p['id'] == product_id]
-            if not products:
-                return render_template('product_display.html', 
-                                    error=f"Product with ID {product_id} not found")
-        
-        return render_template('product_display.html', products=products)
+    error_message = None
+    products = []
     
-    except FileNotFoundError:
-        return render_template('product_display.html', 
-                            error="Data source file not found")
-    except Exception as e:
-        return render_template('product_display.html', 
-                            error=f"An error occurred: {str(e)}")
-
-if __name__ == '__main__':
-    app.run(debug=True)
+    if source not in ['json', 'csv']:
+        error_message = "Wrong source"
+    else:
+        try:
+            # Read data based on source
+            if source == 'json':
+                products = read_json_data()
+            else:
+                products = read_csv_data()
+            
+            # Filter by id if provided
+            if product_id is not None:
+                products = [p for p in products if p['id'] == product_id]
+                if not products:
+                    error_message = "Product not found"
+                    
+        except FileNotFoundError:
+            error_message = f"Error: {source.upper()} file not found"
+            
+    return render_template('product_display.html',
+                         products=products,
+                         error_message=error_message)
