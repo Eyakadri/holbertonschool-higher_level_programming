@@ -12,7 +12,7 @@ class State(Base):
     """State class
 
     Attributes:
-        __tablename__ (str): name of the MySQL 
+        __tablename__ (str): name of the MySQL
         id (sqlalchemy.Integer): state's id
         name (sqlalchemy.String): state's name
     """
